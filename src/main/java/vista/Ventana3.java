@@ -3,31 +3,41 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.mycompany.practica_0302;
+package vista;
+import controlador.Formulario3Control;
+
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
+import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 /**
  * 
  * @author Andy Abad
  */
-public class Ventana3 extends JFrame 
+public class Ventana3 extends JFrame implements ActionListener
 {
+    private Formulario3Control formulario3Control;
+    
     private JPanel jPanelPrincipal;
     private ArrayList<JPanel> jPanelList;
     private ArrayList<JLabel> jLabelList;
+    private ArrayList<JButton> jButtonList;
     private JComboBox jComboBox1;
     private JComboBox jComboBox2;
     private JComboBox jComboBox3;
     private JComboBox jComboBox4;
     private JComboBox jComboBox5;
+    
     public Ventana3(String title)
     {
         super.setTitle(title);
@@ -52,6 +62,7 @@ public class Ventana3 extends JFrame
         
         this.iniciarJLabelList();
         this.iniciarComboBox();
+        this.iniciarJButton();
   
         this.jPanelPrincipal.add(jPanelList.get(0),BorderLayout.NORTH);
         this.jPanelList.get(0).setBackground(Color.BLUE);
@@ -59,7 +70,7 @@ public class Ventana3 extends JFrame
         
         this.jPanelPrincipal.add(jPanelList.get(1),BorderLayout.CENTER);
         this.jPanelList.get(1).setBorder(BorderFactory.createTitledBorder("Personal"));
-        this.jPanelList.get(1).setLayout(new GridLayout(7,2));
+        this.jPanelList.get(1).setLayout(new GridLayout(9,2));
         
         this.jPanelList.get(1).add(jLabelList.get(1));
         this.jPanelList.get(1).add(jLabelList.get(2));
@@ -75,6 +86,20 @@ public class Ventana3 extends JFrame
         this.jPanelList.get(1).add(jComboBox5);
         this.jPanelList.get(1).add(jLabelList.get(8));
         this.jPanelList.get(1).add(jLabelList.get(9));
+        //Agregar los 4 botones de crear, listar, modificar y eliminar
+        this.jPanelList.get(1).add(jButtonList.get(0));
+        this.jButtonList.get(0).addActionListener(this);
+        
+        this.jPanelList.get(1).add(jButtonList.get(1));
+        this.jButtonList.get(1).addActionListener(this);
+        
+        this.jPanelList.get(1).add(jButtonList.get(2));
+        this.jButtonList.get(2).addActionListener(this);
+        
+        this.jPanelList.get(1).add(jButtonList.get(3));
+        this.jButtonList.get(3).addActionListener(this);
+        
+        
         
         
     }
@@ -122,4 +147,73 @@ public class Ventana3 extends JFrame
         this.jComboBox5.addItem("DESPERTINA");
         this.jComboBox5.addItem("VESPERTINA");
     }
+    public void iniciarJButton()
+    {
+        jButtonList=new ArrayList();
+        
+        
+        jButtonList.add(new JButton());
+        jButtonList.add(new JButton());
+        jButtonList.add(new JButton());
+        jButtonList.add(new JButton());
+        
+        jButtonList.get(0).setText("Crear");
+        jButtonList.get(1).setText("Listar");
+        jButtonList.get(2).setText("Modificar");
+        jButtonList.get(3).setText("Eliminar");
+    }
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        formulario3Control=new Formulario3Control();
+        //crear
+        if(e.getSource().equals(jButtonList.get(0)))
+        {
+            String carrera=(String)jComboBox1.getSelectedItem();
+            String modalidad=(String)jComboBox2.getSelectedItem();
+            String sede=(String)jComboBox3.getSelectedItem();
+            String campus=(String)jComboBox4.getSelectedItem();
+            String jornada=(String)jComboBox5.getSelectedItem(); 
+            this.formulario3Control.crear(carrera, modalidad, sede, campus, jornada);
+        }
+        //listar
+        if(e.getSource().equals(jButtonList.get(1)))
+        {
+            System.out.println(this.Imprimir(this.formulario3Control.listar()));
+        }
+        //modificar
+        if(e.getSource().equals(jButtonList.get(2)))
+        {
+            String carrera=(String)jComboBox1.getSelectedItem();
+            String modalidad=(String)jComboBox2.getSelectedItem();
+            String sede=(String)jComboBox3.getSelectedItem();
+            String campus=(String)jComboBox4.getSelectedItem();
+            String jornada=(String)jComboBox5.getSelectedItem(); 
+            
+            int i=Integer.valueOf(JOptionPane.showInputDialog(null,
+                    "Ingrese la posicion donde desea modificar", "Modificar",
+                    JOptionPane.PLAIN_MESSAGE));
+            
+            this.formulario3Control.modificar(i, carrera, modalidad, sede, campus, jornada);
+        }
+        //eliminar
+        if(e.getSource().equals(jButtonList.get(3)))
+        {
+            int i=Integer.valueOf(JOptionPane.showInputDialog(null,
+                    "Ingrese la posicion donde desea eliminar", "Eliminar",
+                    JOptionPane.PLAIN_MESSAGE));
+            this.formulario3Control.eliminar(i);
+        }
+    }
+    
+    public String Imprimir(ArrayList lista)
+    {
+        String cadena="";
+        for(Object object: lista)
+        {
+            cadena=cadena+object+"\n";
+        }
+        return cadena;
+    }
+    
 }

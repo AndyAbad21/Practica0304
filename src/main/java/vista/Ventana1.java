@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package com.mycompany.practica_0302;
+package vista;
+import controlador.Formulario1Control;
+
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,21 +16,25 @@ import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 /**
  * 
  * @author Andy Abad
  */
-public class Ventana1 extends JFrame
+public class Ventana1 extends JFrame implements ActionListener
 {
     private JPanel jPanelPrincipal1;
     private JPanel jPanelPrincipal2;
     private ArrayList<JPanel> jPanelList;
     private ArrayList<JLabel> jLabelList;
-    private JButton jButton1;
+    private ArrayList<JButton> jButtonList;
     private JComboBox jComboBox1;
     private JComboBox jComboBox2;
     private JTextField jTextField1;
+    private Formulario1Control formulario1Control;
 
     public Ventana1(String title) {
         super.setTitle(title);
@@ -88,8 +94,18 @@ public class Ventana1 extends JFrame
 
         this.jPanelPrincipal2.add(jPanelList.get(4));
         this.jPanelList.get(4).setBackground(Color.WHITE);
-        this.jPanelList.get(4).add(jButton1);
+        
+        this.jPanelList.get(4).add(jButtonList.get(0));
+        this.jButtonList.get(0).addActionListener(this);
+        
+        this.jPanelList.get(4).add(jButtonList.get(1));
+        this.jButtonList.get(1).addActionListener(this);
 
+        this.jPanelList.get(4).add(jButtonList.get(2));
+        this.jButtonList.get(2).addActionListener(this);
+        
+        this.jPanelList.get(4).add(jButtonList.get(3));
+        this.jButtonList.get(3).addActionListener(this);
     }
 
     public void iniciarEtiquetas() {
@@ -119,9 +135,65 @@ public class Ventana1 extends JFrame
     }
 
     public void iniciarJButton() {
-        jButton1 = new JButton("Ingresar");
-
+        jButtonList = new ArrayList();
+        
+        jButtonList.add(new JButton());
+        jButtonList.add(new JButton());
+        jButtonList.add(new JButton());
+        jButtonList.add(new JButton());
+        this.jButtonList.get(0).setText("Crear");
+        this.jButtonList.get(1).setText("Listar");
+        this.jButtonList.get(2).setText("Modificar");
+        this.jButtonList.get(3).setText("Eliminar");
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        formulario1Control=new Formulario1Control();
+        
+        if(e.getSource().equals(jButtonList.get(0)))
+        {
+            String sede=(String)jComboBox1.getSelectedItem();
+            String tipoDocumentacion=(String)jComboBox2.getSelectedItem();
+            String documentacion=jTextField1.getText();
+            this.formulario1Control.crear(sede, tipoDocumentacion, documentacion);
+            this.jTextField1.setText("");
+        }
+        if(e.getSource().equals(jButtonList.get(1)))
+        {
+            
+            System.out.println(this.Imprimir(this.formulario1Control.listar()));
+            //System.out.println(this.formulario1Control.listar());
+        }
+        if(e.getSource().equals(jButtonList.get(2)))
+        {
+            String sede=(String)jComboBox1.getSelectedItem();
+            String tipoDocumentacion=(String)jComboBox2.getSelectedItem();
+            String documentacion=jTextField1.getText();
+            int i=Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese la posicicion"
+                    +" donde desea modificar: ", "Modificar Formulario", 
+                    JOptionPane.PLAIN_MESSAGE));
+            this.formulario1Control.modificar(i,sede, tipoDocumentacion, documentacion);
+        }
+        if(e.getSource().equals(jButtonList.get(3)))
+        {
+            int i=Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese la"
+                    +"posicion de la lista a eliminar: ", "Eliminar Formulario"
+                    ,JOptionPane.PLAIN_MESSAGE));
+            this.formulario1Control.eliminar(i);
+        }
+    }
+    public String Imprimir(ArrayList lista)
+    {
+        String cadena="";
+        for(Object object: lista)
+        {
+            cadena=cadena+object+"\n";
+        }
+        return cadena;
+    }
+    
     
     
 }
