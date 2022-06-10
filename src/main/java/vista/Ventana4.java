@@ -4,10 +4,13 @@
  */
 
 package vista;
+import controlador.Formulario4Control;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,6 +18,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -23,9 +27,11 @@ import javax.swing.JTextField;
  * 
  * @author Andy Abad
  */
-public class Ventana4 extends JFrame
+public class Ventana4 extends JFrame implements ActionListener
 {
- private JPanel jPanelPrincipal;
+    Formulario4Control formulario4Control;
+    
+    private JPanel jPanelPrincipal;
     private ArrayList<JPanel> jPanelList;
     private ArrayList<JLabel> jLabelList;
     private ArrayList<JButton> jButtonList;
@@ -133,6 +139,7 @@ public class Ventana4 extends JFrame
         this.jLabelList.get(15).setBorder(BorderFactory.createLineBorder(Color.GRAY));
         this.jLabelList.get(15).setBackground(Color.LIGHT_GRAY);
         this.jLabelList.get(15).setOpaque(true);
+        //--------------
         this.jPanelList.get(1).add(jTextArea);
         this.jPanelList.get(1).add(jLabelList.get(16));
         this.jLabelList.get(16).setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -161,8 +168,18 @@ public class Ventana4 extends JFrame
         this.jPanelList.get(1).add(jComboBox3);
         
         this.jPanelPrincipal.add(jPanelList.get(2),BorderLayout.SOUTH);
+        
         this.jPanelList.get(2).add(jButtonList.get(0));
+        this.jButtonList.get(0).addActionListener(this);
+        
         this.jPanelList.get(2).add(jButtonList.get(1));
+        this.jButtonList.get(1).addActionListener(this);
+        
+        this.jPanelList.get(2).add(jButtonList.get(2));
+        this.jButtonList.get(2).addActionListener(this);
+        
+        this.jPanelList.get(2).add(jButtonList.get(3));
+        this.jButtonList.get(3).addActionListener(this);
         
     }
     public void iniciarJLabelList()
@@ -201,8 +218,10 @@ public class Ventana4 extends JFrame
     public void iniciarJButton()
     {
         jButtonList=new ArrayList();
-        this.jButtonList.add(new JButton("Guardar"));
-        this.jButtonList.add(new JButton("Cancelar"));
+        this.jButtonList.add(new JButton("Crear"));
+        this.jButtonList.add(new JButton("Listar"));
+        this.jButtonList.add(new JButton("Modificar"));
+        this.jButtonList.add(new JButton("Eliminar"));
     }
     public void iniciarComboBox()
     {
@@ -226,6 +245,123 @@ public class Ventana4 extends JFrame
     public void iniciarJTextArea()
     {
         jTextArea=new JTextArea(5,10);
-        
     }
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        formulario4Control=new Formulario4Control();
+        //crear
+        if(e.getSource().equals(jButtonList.get(0)))
+        {
+            String cadena1=jTextArea.getText();
+            int cadena2=Integer.parseInt(jTextField1.getText());
+            String cadena3=(String)jComboBox1.getSelectedItem();
+            String cadena4=(String)jComboBox2.getSelectedItem();
+            //String cadena5=jCheckBox.getText();
+            String cadena6=(String)jComboBox3.getSelectedItem();
+            
+            //Validadcion de los combo box y el check box
+            boolean llave1;
+            boolean llave2;
+            boolean llave3;
+            if(cadena3.equals("Si"))
+            {
+                llave1=true;
+            }else{
+                llave1=false;
+            }
+            /*if(jCheckBox.isSelected())
+            {
+                llave2=true;
+            }else{
+                llave2=false;
+            }*/
+            if(cadena6.equals("Si"))
+            {
+                llave3=true;
+            }else{
+                llave3=false;
+            }
+            this.formulario4Control.crear(cadena1, cadena2, llave1, cadena4,
+                    jCheckBox.isSelected(), llave3);
+            
+            jTextArea.setText("");
+            jTextField1.setText("");
+            jCheckBox.setSelected(false);
+            
+            
+            
+            System.out.println("El formulario de ha guardado con exito");
+        }
+        //listar
+        if(e.getSource().equals(jButtonList.get(1)))
+        {
+            System.out.println("++++-----------Formularios-----------++++"+"\n");
+            System.out.print(this.Imprimir(formulario4Control.listar()));
+            System.out.println("++++---------------------------------++++");
+        }
+        //modificar
+        if(e.getSource().equals(jButtonList.get(2)))
+        {
+            String cadena1=jTextArea.getText();
+            int cadena2=Integer.parseInt(jTextField1.getText());
+            String cadena3=(String)jComboBox1.getSelectedItem();
+            String cadena4=(String)jComboBox2.getSelectedItem();
+            //String cadena5=jCheckBox.getText();
+            String cadena6=(String)jComboBox3.getSelectedItem();
+            
+            //Validadcion de los combo box y el check box
+            boolean llave1;
+            //boolean llave2;
+            boolean llave3;
+            if(cadena3.equals("Si"))
+            {
+                llave1=true;
+            }else{
+                llave1=false;
+            }
+            /*if(cadena5.equals("Nuevos"))
+            {
+                llave2=true;
+            }else{
+                llave2=false;
+            }*/
+            if(cadena6.equals("Si"))
+            {
+                llave3=true;
+            }else{
+                llave3=false;
+            }
+            int i=Integer.parseInt(JOptionPane.showInputDialog(null,
+                    "Ingrese la posicion donde desea modificar", "Modificar",
+                    JOptionPane.PLAIN_MESSAGE));
+            this.formulario4Control.modificar(i,cadena1, cadena2, llave1, cadena4,
+                    jCheckBox.isSelected(), llave3);
+            
+            jTextArea.setText("");
+            jTextField1.setText("");
+            jCheckBox.setSelected(false);
+            
+            System.out.println("Se modifico el formulario con exito");
+        }
+        //eliminar
+        if(e.getSource().equals(jButtonList.get(3)))
+        {
+            int i=Integer.parseInt(JOptionPane.showInputDialog(null,
+                    "Ingrese la posicion en la lista a eliminar",
+                    "Eliminar", JOptionPane.PLAIN_MESSAGE));
+            formulario4Control.eliminar(i);
+            System.out.println("El formulario se elimino con exito");
+        }
+    }
+    public String Imprimir(ArrayList lista)
+    {
+        String cadena="";
+        for(Object object: lista)
+        {
+            cadena=cadena+object+"\n";
+        }
+        return cadena;
+    }
+    
 }

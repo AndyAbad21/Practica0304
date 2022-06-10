@@ -3,17 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package servicio;
-import modelo.Formulario4;
+import modelo.Formulario5;
 
 import java.util.ArrayList;
 /**
  *
  * @author Andy Abad
  */
-public interface IFormulario4Servicio
+public interface IFormulario5Servicio
 {
-    public Formulario4 crear(Formulario4 formulario4);
-    public ArrayList<Formulario4> listar();
-    public Formulario4 modificar(int i, Formulario4 formulario4);
+    public Formulario5 crear(Formulario5 formulario5);
+    public ArrayList<Formulario5> listar();
+    public Formulario5 modificar(int i, Formulario5 formulario5);
     public Object eliminar(int i);
 }

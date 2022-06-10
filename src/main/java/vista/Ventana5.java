@@ -4,26 +4,35 @@
  */
 
 package vista;
+import controlador.Formulario5Control;
+
 import java.awt.Color;
 import javax.swing.JFrame;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  * 
  * @author Andy Abad
  */
-public class Ventana5 extends JFrame
+public class Ventana5 extends JFrame implements ActionListener
 {
+    private Formulario5Control formulario5Control;
+    
     private JPanel jPanelPrincipal;
     private ArrayList<JPanel> jPanelList;
     private ArrayList<JPanel> jPanelList2;
     private ArrayList<JLabel> jLabelList;
+    private ArrayList<JButton> jButtonList;
     private JComboBox jComboBox1;
     private JComboBox jComboBox2;
     private JComboBox jComboBox3;
@@ -45,7 +54,7 @@ public class Ventana5 extends JFrame
     {
         jPanelPrincipal=new JPanel();
         jPanelPrincipal.setBackground(Color.WHITE);
-        jPanelPrincipal.setLayout(new GridLayout(3,1));
+        jPanelPrincipal.setLayout(new GridLayout(4,1));
         this.iniciarPaneles();
     }
     public void iniciarPaneles()
@@ -54,9 +63,11 @@ public class Ventana5 extends JFrame
         this.jPanelList.add(new JPanel());
         this.jPanelList.add(new JPanel());
         this.jPanelList.add(new JPanel());
+        this.jPanelList.add(new JPanel());
         this.iniciarJLabelList();
         this.iniciarJComboBox();
         this.iniciarJPanel2();
+        this.iniciarJButton();
         
         this.jPanelPrincipal.add(jPanelList.get(0));
         this.jPanelList.get(0).add(jPanelList2.get(0));
@@ -94,6 +105,24 @@ public class Ventana5 extends JFrame
         this.jPanelList.get(2).add(jPanelList2.get(6));
         this.jPanelList2.get(6).add(jLabelList.get(6));
         this.jPanelList2.get(6).setOpaque(true);
+        
+        this.jPanelPrincipal.add(jPanelList.get(3));
+        
+        this.jPanelList.get(3).add(jButtonList.get(0));
+        this.jButtonList.get(0).addActionListener(this);
+        
+        this.jPanelList.get(3).add(jButtonList.get(1));
+        this.jButtonList.get(1).addActionListener(this);
+        
+        this.jPanelList.get(3).add(jButtonList.get(2));
+        this.jButtonList.get(2).addActionListener(this);
+        
+        this.jPanelList.get(3).add(jButtonList.get(3));
+        this.jButtonList.get(3).addActionListener(this);
+       
+        this.jPanelList.get(3).setOpaque(true);
+        
+        
         
     }
     public void iniciarJPanel2()
@@ -162,5 +191,84 @@ public class Ventana5 extends JFrame
         
         jComboBox6.addItem("60");
         jComboBox6.addItem("59");
+        jComboBox6.addItem("58");
+    }
+    public void iniciarJButton()
+    {
+        jButtonList=new ArrayList();
+        
+        jButtonList.add(new JButton());
+        jButtonList.add(new JButton());
+        jButtonList.add(new JButton());
+        jButtonList.add(new JButton());
+        
+        jButtonList.get(0).setText("Crear");
+        jButtonList.get(1).setText("Listar");
+        jButtonList.get(2).setText("Modificar");
+        jButtonList.get(3).setText("Eliminar");
+    }
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        formulario5Control=new Formulario5Control();
+        //crar
+        if(e.getSource().equals(jButtonList.get(0)))
+        {
+            String sede=(String)jComboBox1.getSelectedItem();
+            String campus=(String)jComboBox2.getSelectedItem();
+            String carrera=(String)jComboBox3.getSelectedItem();
+            String codigoProyecto=(String)jComboBox4.getSelectedItem();
+            String modalidad=(String)jComboBox5.getSelectedItem();
+            String periodo=(String)jComboBox6.getSelectedItem();
+            
+            this.formulario5Control.crear(sede, campus, carrera, codigoProyecto,
+                    modalidad, periodo);
+            
+            System.out.println("El formulario se creo correctamente");
+        }    
+        //listar
+        if(e.getSource().equals(jButtonList.get(1)))
+        {
+            System.out.println("++++++++------------Formularios-----------+++++++++");
+            System.out.print(this.imprimir(this.formulario5Control.listar()));
+            System.out.println("++++++++----------------------------------+++++++++");
+        }
+        //modificar
+        if(e.getSource().equals(jButtonList.get(2)))
+        {
+            String sede=(String)jComboBox1.getSelectedItem();
+            String campus=(String)jComboBox2.getSelectedItem();
+            String carrera=(String)jComboBox3.getSelectedItem();
+            String codigoProyecto=(String)jComboBox4.getSelectedItem();
+            String modalidad=(String)jComboBox5.getSelectedItem();
+            String periodo=(String)jComboBox6.getSelectedItem();
+            
+            int i=Integer.valueOf(JOptionPane.showInputDialog(null,
+                    "Ingrese la posicion donde desea modificar",
+                    "Modificar", JOptionPane.PLAIN_MESSAGE));
+            
+            this.formulario5Control.modificar(i,sede, campus, carrera, codigoProyecto,
+                    modalidad, periodo);
+            
+            System.out.println("El formulario se modifico correctamente");
+        }
+        //eliminar
+        if(e.getSource().equals(jButtonList.get(3)))
+        {
+            int i=Integer.valueOf(JOptionPane.showInputDialog(null,
+                    "Ingrese la posicion donde desea modificar",
+                    "Modificar", JOptionPane.PLAIN_MESSAGE));
+            this.formulario5Control.eliminar(i);
+            System.out.println("El formulario se elimino correctamente");
+        }
+    }
+    public String imprimir(ArrayList lista)
+    {
+        String cadena="";
+        for(Object object: lista)
+        {
+            cadena=cadena+object+"\n";
+        }
+        return cadena;
     }
 }

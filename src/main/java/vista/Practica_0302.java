@@ -19,9 +19,9 @@ public class Practica_0302 {
         //v2.setVisible(true);
         //Ventana3 v3=new Ventana3("Ventana 3");
         //v3.setVisible(true);
-        Ventana4 v4=new Ventana4("Ventana 4");
-        v4.setVisible(true);
-        /*Ventana5 v5=new Ventana5("Ventana 5");
-        v5.setVisible(true);*/
+        //Ventana4 v4=new Ventana4("Ventana 4");
+        //v4.setVisible(true);
+        Ventana5 v5=new Ventana5("Ventana 5");
+        v5.setVisible(true);
     }
 }
